@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import testStrategies from './models';
+import testCases from './app-model';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -13,7 +13,7 @@ class Question extends React.Component {
             <tr>
                 <td>{this.props.id + 1}</td>
                 <td>{this.props.testInfo.name}</td>
-                <td>{this.state.testInfo.status || "NOT STARTED"}</td>
+                <td>{this.state.testInfo.status || "--"}</td>
                 <td>{this.props.testInfo.message}</td>
             </tr>
         );
@@ -23,52 +23,51 @@ class Question extends React.Component {
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { strategies: testStrategies, tzid: props.tzid };
-        this.changeState = this.changeState.bind(this);
-        this.timeZoneIdChanged = this.timeZoneIdChanged.bind(this);
+        this.state = { strategies: testCases, tzid: props.tzid };
+        this.testTimeZones = this.testTimeZones.bind(this);
+        this.timeZoneChanged = this.timeZoneChanged.bind(this);
     }
 
-    timeZoneIdChanged(e) {
+    timeZoneChanged(e) {
         this.state.tzid = e.target.value;
     }
 
-    changeState() {
+    testTimeZones() {
         let timeZoneId = this.state.tzid;
         let ignored = false;
-        for(let item of this.state.strategies) {
+        for(let item of testCases) {
+            item.reset();
             if(ignored) {
-                item.status = 'IGNORED';
+                item.ignore();
                 continue;
             }
 
             let r = item.test(timeZoneId);
             if(r.error) {
-                item.status = 'Error';
-                item.message = r.error;
+                item.error(r.error);
                 ignored = true;
-                continue;
             } else {
-                item.status = 'GOOD';
+                item.pass();
                 timeZoneId = r.result;
             }
         }
 
-        this.setState({ strategies: this.state.strategies });
+        this.setState({ strategies: testCases });
     }
 
     render() {
-        let tableRows = testStrategies.map((strategy, i) => {
+        let tableRows = this.state.strategies.map((strategy, i) => {
             return (<Question key={i + 1} id={i} testInfo={strategy} />)
         });
         return (
             <div>
-            <input defaultValue={this.state.tzid} onChange={this.timeZoneIdChanged} />
+            <input defaultValue={this.state.tzid} onChange={this.timeZoneChanged} />
             <table>
                 <tbody>
                     {tableRows}
                 </tbody>
             </table>
-            <button onClick={this.changeState}>Test</button>
+            <button onClick={this.testTimeZones}>Test</button>
             </div>
         );
     }
