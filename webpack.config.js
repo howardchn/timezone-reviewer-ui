@@ -1,16 +1,17 @@
 const path = require('path');
 module.exports = {
   mode: 'development',
-  entry: path.join(__dirname, 'assets', 'index'),
+  entry: path.join(__dirname, 'assets', 'app'),
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
   module: {
     rules: [{
-      test: /.jsx?$/,
+      //test: /.jsx?$/,
+      test: /\.(js|jsx)$/,
       include: [
-        path.resolve(__dirname, 'app')
+        path.resolve(__dirname, 'assets')
       ],
       exclude: [
         path.resolve(__dirname, 'node_modules'),
