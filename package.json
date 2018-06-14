@@ -24,6 +24,6 @@
     "lodash": "^4.17.10",
     "moment-timezone": "^0.5.17",
     "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "react-dom": "^16.4.0"
   }
 }

@@ -6,6 +6,10 @@ import TestCase from './testcase';
 import Utils from './utils';
 import moment from 'moment-timezone';
 
+function highlight(id) {
+    return `<b>${id}</b>`;
+}
+
 function checkJavaSupported(id) {
     if (_.isEmpty(id)) {
         return Utils.error('Empty id is not allowed.');
@@ -17,8 +21,6 @@ function checkJavaSupported(id) {
     } else {
         return Utils.ok(normalizedId);
     }
-
-    // return _.isEmpty(normalizedId) ? Utils.error(`${id} is not an available time zone ID in JAVA.`) : Utils.ok(normalizedId);
 }
 
 function check3Letters(id) {
@@ -34,7 +36,7 @@ function checkLMSupport(id) {
     if (_.isEmpty(existId)) {
         return Utils.ok(id);
     } else {
-        return Utils.error(`${id} is supported in LM.`);
+        return Utils.error(`${highlight(id)} is supported in LM.`);
     }
 }
 
