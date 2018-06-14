@@ -2,6 +2,7 @@ import _ from 'lodash';
 import testCases from './app-model';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {} from 'bootstrap/dist/css/bootstrap.min.css';
 
 class Question extends React.Component {
     constructor(props) {
@@ -35,15 +36,15 @@ class App extends React.Component {
     testTimeZones() {
         let timeZoneId = this.state.tzid;
         let ignored = false;
-        for(let item of testCases) {
+        for (let item of testCases) {
             item.reset();
-            if(ignored) {
+            if (ignored) {
                 item.ignore();
                 continue;
             }
 
             let r = item.test(timeZoneId);
-            if(r.error) {
+            if (r.error) {
                 item.error(r.error);
                 ignored = true;
             } else {
@@ -61,13 +62,13 @@ class App extends React.Component {
         });
         return (
             <div>
-            <input defaultValue={this.state.tzid} onChange={this.timeZoneChanged} />
-            <table>
-                <tbody>
-                    {tableRows}
-                </tbody>
-            </table>
-            <button onClick={this.testTimeZones}>Test</button>
+                <input defaultValue={this.state.tzid} onChange={this.timeZoneChanged} />
+                <table>
+                    <tbody>
+                        {tableRows}
+                    </tbody>
+                </table>
+                <button onClick={this.testTimeZones}>Test</button>
             </div>
         );
     }
