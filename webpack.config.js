@@ -36,6 +36,6 @@ module.exports = {
     publicPath: path.join('/dist/')
   },
   plugins: [
-    // new UglifyJS()
+    new UglifyJS()
   ]
 };
