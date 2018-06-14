@@ -10,16 +10,16 @@ class Question extends React.Component {
         this.state = _.extend({}, props);
     }
     render() {
-        let trClass = '';
+        let trClass = 'd-flex ';
         switch (this.state.testInfo.status) {
             case 'Good':
-                trClass = 'table-success';
+                trClass += 'table-success';
                 break;
             case 'Error':
-                trClass = 'table-danger';
+                trClass += 'table-danger';
                 break;
             case 'Ignored':
-                trClass = 'table-active';
+                trClass += 'table-active';
                 break;
             default:
                 break;
@@ -27,10 +27,10 @@ class Question extends React.Component {
 
         return (
             <tr className={trClass}>
-                <td>{this.props.id + 1}</td>
-                <td>{this.props.testInfo.name}</td>
-                <td>{this.state.testInfo.status || "--"}</td>
-                <td dangerouslySetInnerHTML={{__html: this.state.testInfo.message}}></td>
+                <td className="col col-sm-1">{this.props.id + 1}</td>
+                <td className="col col-sm-4">{this.props.testInfo.name}</td>
+                <td className="col col-sm-2">{this.state.testInfo.status || "--"}</td>
+                <td className="col col-sm-5" dangerouslySetInnerHTML={{__html: this.state.testInfo.message}}></td>
             </tr>
         );
     }
@@ -102,7 +102,7 @@ class App extends React.Component {
             return (<Question key={i + 1} id={i} testInfo={strategy} />)
         });
         return (
-            <div style={{"margin-top":"10px"}}>
+            <div style={{"marginTop":"10px"}}>
                 <h1>Should We Support This TIME ZONE?</h1>
                 <p>
                     New time zones should be strictly reviewed. We must make sure the time zones are supported by backend and front end, and no duplicated id or maybe duplicate rules.

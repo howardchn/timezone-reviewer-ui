@@ -1,4 +1,6 @@
 const path = require('path');
+const UglifyJS = require('uglifyjs-webpack-plugin');
+
 module.exports = {
   mode: 'development',
   entry: path.join(__dirname, 'assets', 'app'),
@@ -32,5 +34,8 @@ module.exports = {
   devtool: 'source-map',
   devServer: {
     publicPath: path.join('/dist/')
-  }
+  },
+  plugins: [
+    // new UglifyJS()
+  ]
 };
