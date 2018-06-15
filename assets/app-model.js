@@ -55,7 +55,7 @@ function checkUISupported(id) {
 
 function checkTZDups(id) {
     let equavantIds = _.find(tzdbDups, ids => _.includes(ids, id));
-    let hasDup = _.some(equavantIds, id => _.includes(equavantIds, id));
+    let hasDup = equavantIds && _.some(equavantIds, id => _.includes(tzdbLM, id));
     if(hasDup) {
         return Utils.error(`Some time zones have the same rule to ${id}. Check ${equavantIds.filter(i => i !== id).join(', ')}.`);
     } else {
