@@ -36,27 +36,44 @@ class Question extends React.Component {
     }
 }
 
+const TopsPanel = () => {
+    return (
+    <article>
+        <header><h4>Some extra info to help manually checks before adding to GCC</h4></header>
+        <ul>
+            <li>This tool is created based on <a href="https://confluence.logicmonitor.com/display/DEV/Extend+Time+Zone+List+Guide+and+Checklist" target="_blank">this checklist</a> on confluence.</li>
+            <li>Common time zone supported by <a href="https://cloud.google.com/dataprep/docs/html/Supported-Time-Zone-Values_66194188" target="_blank">Google</a> or <a href="https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/default-time-zones" target="_blank">Bing</a>.</li>
+            <li>Time zone extending list only allows to add new time zones; removing time zone will have risky; please consider more.</li>
+            <li>Create review GCC review is necessary.</li>
+        </ul>
+    </article>);
+};
+
 class ResultPanel extends React.Component {
     constructor(props) {
         super();
-        this.state = { success: props.success };
+        this.state = { success: props.success, tzid: props.tzid };
     }
 
     render() {
         let className = 'invisible';
         let message = '';
+        let hideTips = true;
         if(this.props.success === 'success') {
             className = 'alert alert-success';
-            message = `Basic tests passed. ${this.props.tzid} is available to add. 
-            But one more thing to check is that the time zone is popular.`
+            message = (<div>Basic tests passed. <a href={ 'http://www.timezoneconverter.com/cgi-bin/zoneinfo?tz=' + this.props.tzid } target="_blank">{ this.props.tzid }</a> is available to add. 
+            But one more thing to check is that the time zone is popular.</div>)
+            hideTips = false;
         } else if(this.props.success === 'failed') {
             className = 'alert alert-danger';
             message  = 'Failed. Check the reasons in the list.';
         } 
 
-
         return (
-            <div className={className}>{message}</div>
+            <div>
+                <div className={className}>{message}</div>
+                { !hideTips && <TopsPanel /> }
+            </div>
         );
     }
 }
@@ -74,7 +91,7 @@ class App extends React.Component {
     }
 
     testTimeZones() {
-        let timeZoneId = this.state.tzid;
+        let tzid = this.state.tzid;
         let ignored = false;
         for (let item of testCases) {
             item.reset();
@@ -83,18 +100,18 @@ class App extends React.Component {
                 continue;
             }
 
-            let r = item.test(timeZoneId);
+            let r = item.test(tzid);
             if (r.error) {
                 item.error(r.error);
                 ignored = true;
             } else {
                 item.pass();
-                timeZoneId = r.result;
+                tzid = r.result;
             }
         }
 
         let success = !!!ignored ? 'success' : 'failed';
-        this.setState({ strategies: testCases, success });
+        this.setState({ strategies: testCases, success, tzid });
     }
 
     render() {
@@ -118,7 +135,7 @@ class App extends React.Component {
                         {tableRows}
                     </tbody>
                 </table>
-                <ResultPanel success={this.state.success} tzid={this.props.tzid} />
+                <ResultPanel success={this.state.success} tzid={this.state.tzid} />
             </div>
         );
     }
